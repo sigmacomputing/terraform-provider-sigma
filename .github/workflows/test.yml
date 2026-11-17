@@ -1,0 +1,115 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+# A newer push to the same PR supersedes its running checks.
+concurrency:
+  group: test-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    name: build & unit tests
+    if: github.event.action != 'labeled' || github.event.label.name == 'acceptance'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+        with:
+          go-version-file: go.mod
+          cache: true
+      - run: go mod download
+      - run: go vet ./...
+      - run: go build ./...
+      - run: go test -race -count=1 ./...
+
+  govulncheck:
+    name: govulncheck
+    if: github.event.action != 'labeled' || github.event.label.name == 'acceptance'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+        with:
+          go-version-file: go.mod
+          cache: true
+      # Fails on any vulnerability the code can reach, including in the Go toolchain.
+      - run: go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 ./...
+
+  lint:
+    name: lint & docs
+    if: github.event.action != 'labeled' || github.event.label.name == 'acceptance'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+        with:
+          go-version-file: go.mod
+          cache: true
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with:
+          terraform_wrapper: false
+      - run: make lint
+      # Fails if docs/ is stale or examples aren't formatted.
+      - run: make docs-check
+
+  zizmor:
+    name: workflow lint (zizmor)
+    if: github.event.action != 'labeled' || github.event.label.name == 'acceptance'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      # Fails the job on any finding (no SARIF upload); online audits catch impostor commits.
+      - uses: zizmorcore/zizmor-action@53290badfa369cb0bf7ad16342cb62c2fa47ac7b # v0.8.0
+        with:
+          version: v1.31.1
+          persona: auditor
+          online-audits: true
+          advanced-security: false
+
+  # Acceptance tests run on the `acceptance` label or manual dispatch, and every
+  # run waits for a data-platform reviewer (sigma-sandbox environment) before
+  # the sandbox credentials are exposed.
+  acceptance:
+    name: acceptance tests
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (contains(github.event.pull_request.labels.*.name, 'acceptance') &&
+       (github.event.action != 'labeled' || github.event.label.name == 'acceptance'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: sigma-sandbox
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
+        with:
+          go-version-file: go.mod
+          # A restored cache must not run in a job that holds secrets.
+          cache: false
+      - run: TF_ACC=1 go test -count=1 -timeout 30m ./internal/services/...
+        env:
+          SIGMA_BASE_URL: ${{ secrets.SIGMA_BASE_URL }}
+          SIGMA_CLIENT_ID: ${{ secrets.SIGMA_CLIENT_ID }}
+          SIGMA_CLIENT_SECRET: ${{ secrets.SIGMA_CLIENT_SECRET }}

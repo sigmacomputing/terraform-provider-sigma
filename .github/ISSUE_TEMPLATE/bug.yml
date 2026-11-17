@@ -1,0 +1,64 @@
+name: Bug report
+description: Something in the provider doesn't work as expected.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Don't report security vulnerabilities here. Use [SECURITY.md](../blob/main/SECURITY.md) instead.
+        Remove client secrets, passwords, tokens and other sensitive values from everything you paste.
+  - type: input
+    id: provider-version
+    attributes:
+      label: Provider version
+      placeholder: "0.15.1"
+    validations:
+      required: true
+  - type: input
+    id: terraform-version
+    attributes:
+      label: Terraform version
+      description: Output of `terraform version`.
+    validations:
+      required: true
+  - type: input
+    id: resources
+    attributes:
+      label: Affected resources or data sources
+      placeholder: "sigma_workspace_grant"
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Terraform configuration
+      description: The smallest configuration that reproduces the problem.
+      render: terraform
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the full error message.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. terraform apply
+        2. ...
+  - type: textarea
+    id: logs
+    attributes:
+      label: Debug output
+      description: Relevant `TF_LOG=DEBUG` output. The provider masks known secret fields, but check for anything sensitive before posting.
+      render: shell

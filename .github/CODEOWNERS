@@ -1,0 +1,17 @@
+# Later lines win. Each listed team needs write access to the repository.
+
+# Provider code
+*                         @sigmacomputing/data-platform
+
+# Workflows, release and publish tooling
+/.github/                 @sigmacomputing/devex
+/.goreleaser.yml          @sigmacomputing/devex
+/scripts/                 @sigmacomputing/devex
+/tools/tools.go           @sigmacomputing/devex
+
+# Dependency changes are supply-chain changes
+/go.mod                   @sigmacomputing/devex @sigmacomputing/data-platform
+/go.sum                   @sigmacomputing/devex @sigmacomputing/data-platform
+
+# Credential handling, TLS, redirects and log masking
+/internal/client/         @sigmacomputing/security-and-compliance @sigmacomputing/data-platform

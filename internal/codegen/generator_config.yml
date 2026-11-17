@@ -1,0 +1,142 @@
+# Configuration for tfplugingen-openapi (HashiCorp's official OpenAPI -> TF
+# Provider Spec generator). This file maps Sigma's REST API endpoints onto
+# Terraform resources and data sources. The generated output is consumed by
+# tfplugingen-framework to produce schema/model skeletons under
+# internal/services/_generated/. CRUD logic is hand-written outside _generated/
+# and remains stable across regens.
+#
+# Run via:
+#   make generate
+#
+# The generator does NOT attempt to model:
+#   - Polymorphic `details` on POST /v2/connections (oneOf per warehouse) — we
+#     accept a string `details_json` and forward verbatim.
+#   - Composite-ID nested resources (team_membership, UA assignments, grants).
+#   - Pagination shape differences (v2 array vs v2.1 cursor) — handled by
+#     internal/client/pagination.go.
+provider:
+  name: sigma
+
+resources:
+  member:
+    create:
+      path: /v2/members
+      method: POST
+    read:
+      path: /v2/members/{memberId}
+      method: GET
+    update:
+      path: /v2/members/{memberId}
+      method: PATCH
+    delete:
+      path: /v2/members/{memberId}
+      method: DELETE
+
+  team:
+    create:
+      path: /v2/teams
+      method: POST
+    read:
+      path: /v2/teams/{teamId}
+      method: GET
+    update:
+      path: /v2/teams/{teamId}
+      method: PATCH
+    delete:
+      path: /v2/teams/{teamId}
+      method: DELETE
+
+  account_type:
+    create:
+      path: /v2/accountTypes
+      method: POST
+    # No GET-by-id; resource Read implementation lists and filters.
+    # No PATCH; all updates trigger replace.
+    delete:
+      path: /v2/accountTypes/{accountTypeId}
+      method: DELETE
+
+  user_attribute:
+    create:
+      path: /v2/user-attributes
+      method: POST
+    read:
+      path: /v2/user-attributes/{userAttributeId}
+      method: GET
+    delete:
+      path: /v2/user-attributes/{userAttributeId}
+      method: DELETE
+
+  connection:
+    create:
+      path: /v2/connections
+      method: POST
+    read:
+      path: /v2/connections/{connectionId}
+      method: GET
+    update:
+      path: /v2/connections/{connectionId}
+      method: PATCH
+    delete:
+      path: /v2/connections/{connectionId}
+      method: DELETE
+
+  api_credential:
+    create:
+      path: /v2/credentials
+      method: POST
+    delete:
+      path: /v2/credentials/{clientId}
+      method: DELETE
+
+  # API connectors feature (Sigma calling EXTERNAL HTTP endpoints). Distinct from
+  # api_credential above (OAuth for Sigma's own API). Complex params/config/credential
+  # sub-objects are hand-modeled as opaque JSON strings, like connection.details_json.
+  api_connector_credential:
+    create:
+      path: /v2/api-credentials
+      method: POST
+    read:
+      path: /v2/api-credentials/{apiCredentialId}
+      method: GET
+    update:
+      path: /v2/api-credentials/{apiCredentialId}
+      method: PATCH
+    delete:
+      path: /v2/api-credentials/{apiCredentialId}
+      method: DELETE
+
+  api_connector:
+    create:
+      path: /v2/api-connectors
+      method: POST
+    read:
+      path: /v2/api-connectors/{apiConnectorId}
+      method: GET
+    update:
+      path: /v2/api-connectors/{apiConnectorId}
+      method: PATCH
+    delete:
+      path: /v2/api-connectors/{apiConnectorId}
+      method: DELETE
+
+data_sources:
+  account_type_permissions:
+    read:
+      path: /v2/accountTypes/{accountTypeId}/permissions
+      method: GET
+
+  members:
+    read:
+      path: /v2.1/members
+      method: GET
+
+  teams:
+    read:
+      path: /v2.1/teams
+      method: GET
+
+  connection_path:
+    read:
+      path: /v2/connections/paths
+      method: GET
