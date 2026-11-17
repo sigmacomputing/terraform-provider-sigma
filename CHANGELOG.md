@@ -6,6 +6,15 @@ this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v0.16.0
+
+First public release.
+
+### Changed
+
+- Licensed under the Apache License 2.0. Release archives now include `LICENSE` and a `NOTICE` file listing Sigma's copyright and the third-party Go modules compiled into the binary.
+- The README documents what data the provider reads and where it goes, what ends up in Terraform state, and how to protect it.
+
 ## v0.15.1
 
 ### Security
