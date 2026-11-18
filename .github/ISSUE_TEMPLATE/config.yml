@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://www.sigmacomputing.com/product/vdp
+    about: Report security issues privately through Sigma's Vulnerability Disclosure Program.
+  - name: Sigma product questions
+    url: https://help.sigmacomputing.com
+    about: Questions about Sigma itself, not the Terraform provider.

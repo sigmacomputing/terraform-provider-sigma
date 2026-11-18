@@ -1,0 +1,23 @@
+name: Feature request
+description: A new resource, data source, attribute or behavior.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The task or workflow this would help with.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed resource or attribute
+      description: What you'd like to write in Terraform, if you have a shape in mind.
+      render: terraform
+  - type: input
+    id: api
+    attributes:
+      label: Sigma API endpoint
+      description: The Sigma REST API endpoint that supports this, if you know it.
+      placeholder: "POST /v2/..."

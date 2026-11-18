@@ -1,0 +1,1 @@
+terraform import sigma_tenant_deployment_capability.example '<tenant_organization_id>:<deploy_to_tenant_organization_id>'
