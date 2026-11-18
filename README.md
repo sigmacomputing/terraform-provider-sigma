@@ -33,7 +33,7 @@ Report bugs and request features in [GitHub issues](https://github.com/sigmacomp
 - [Logging](#logging)
 - [Development](#development)
 - [Not yet supported](#not-yet-supported)
-- [License](#license)
+- [License and Legal Notices](#license-and-legal-notices)
 
 ## Requirements
 
@@ -296,10 +296,11 @@ the endpoints they need:
 - **`sigma_report` resource** — same POST+GET-only API limitation as workbook had; deferred.
 - **Cross-org workbook share** — POST-only action endpoint, not modelable as a TF resource.
 
-## License
+## License and Legal Notices
 
+Sigma Terraform Provider<br>
 Copyright 2026 Sigma Computing, Inc.
 
-Licensed under the [Apache License, Version 2.0](LICENSE). See [NOTICE](NOTICE) for copyright notices and the third-party components included in release binaries. "Sigma" and "Sigma Computing" are trademarks of Sigma Computing, Inc.; the license doesn't grant rights to use them.
+Sigma Terraform Provider (the “application”) is licensed by Sigma Computing, Inc. (“Sigma”) under the [Apache License, Version 2.0](LICENSE) (the “License”).
 
-Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
+The application is not a part of Sigma’s services provided under Sigma’s Main Services Agreement and other similar commercial agreements between Sigma and its customers. The provision, access, installation, download, and use of the application are governed solely by the License; and you may not use the application except in compliance with the License. Unless required by applicable law or agreed to in writing, the application is distributed on an “as-is” basis, without warranties or conditions of any kind, either express or implied. Your use of the application is at your own risk, and Sigma has no obligation to support your use of this application.
