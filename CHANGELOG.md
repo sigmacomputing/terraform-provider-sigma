@@ -6,6 +6,12 @@ this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v0.16.1
+
+### Fixed
+
+- Registry docs: resource and data source pages showed their page metadata as text at the top, and weren't grouped into sections in the sidebar.
+
 ## v0.16.0
 
 First public release, licensed under the Apache License 2.0.
