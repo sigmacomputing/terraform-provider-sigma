@@ -16,7 +16,7 @@ terraform {
   required_providers {
     sigma = {
       source  = "sigmacomputing/sigma"
-      version = "~> 0.15"
+      version = "~> 0.16"
     }
   }
 }

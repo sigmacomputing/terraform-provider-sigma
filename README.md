@@ -13,7 +13,7 @@ Important documents: [Registry docs](https://registry.terraform.io/providers/sig
 | [Contributing](CONTRIBUTING.md)
 | [Security policy](SECURITY.md)
 
-> **Status:** the provider is pre-1.0. Resources and attributes can change between minor versions; breaking changes are called out in the [changelog](CHANGELOG.md). Pin a minor version (`~> 0.15`) and read the changelog before upgrading.
+> **Status:** the provider is pre-1.0. Resources and attributes can change between minor versions; breaking changes are called out in the [changelog](CHANGELOG.md). Pin a minor version (`~> 0.16`) and read the changelog before upgrading.
 
 > ⚠️ **Security:** if you believe you have found a security issue, report it through Sigma's [Vulnerability Disclosure Program](https://www.sigmacomputing.com/product/vdp). Do not open a public GitHub issue.
 
@@ -52,7 +52,7 @@ terraform {
   required_providers {
     sigma = {
       source  = "sigmacomputing/sigma"
-      version = "~> 0.15"
+      version = "~> 0.16"
     }
   }
 }
