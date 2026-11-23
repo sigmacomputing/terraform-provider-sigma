@@ -10,10 +10,10 @@ description: |-
 This guide is for anyone who wants to manage a Sigma organization as code. It
 covers authentication, installation, and a first working configuration.
 
-> The provider currently ships **24 resources** and **19 data sources** covering
-> identity & access, connections, workspaces, workbooks/content, API connectors,
-> and content-deployment helpers. See the [provider docs index](../index.md) and
-> the repo `README.md` for the full list and per-resource lifecycle notes.
+> The provider currently ships **35 resources** and **27 data sources** covering
+> identity & access, connections & integrations, workspaces & content, organization
+> settings, and tenants & deployment. See the [provider docs](https://registry.terraform.io/providers/sigmacomputing/sigma/latest/docs) and
+> the [README](https://github.com/sigmacomputing/terraform-provider-sigma#readme) for the full list and per-resource lifecycle notes.
 
 ---
 
@@ -51,7 +51,7 @@ terraform {
   required_providers {
     sigma = {
       source  = "sigmacomputing/sigma"
-      version = "~> 0.15"
+      version = "~> 0.16"
     }
   }
 }
@@ -79,7 +79,7 @@ terraform {
   required_providers {
     sigma = {
       source  = "sigmacomputing/sigma"
-      version = "~> 0.15"
+      version = "~> 0.16"
     }
   }
 }
@@ -116,14 +116,15 @@ terraform plan
 terraform apply
 ```
 
-See `examples/` in the repo for one config per resource and data source.
+See [`examples/`](https://github.com/sigmacomputing/terraform-provider-sigma/tree/main/examples) in the repo for one config per resource and data source.
 
 ---
 
 ## 4. Operational notes
 
-- **State contains secrets.** `client_secret`, API-credential secrets, embed
-  secrets, and `sigma_api_connector_credential.credential_json` land in state. Use a
+- **State contains secrets.** `sigma_api_credential.client_secret`,
+  `sigma_connection.details_json`, `sigma_api_connector_credential.credential_json`,
+  `sigma_smtp_settings.password` and user-attribute values land in state. Use a
   remote backend with encryption (HCP Terraform, or S3 + KMS) and restrict access.
   See the README "State file security" section.
 - **Lifecycle quirks.** Some resources are create-only / replace-on-change

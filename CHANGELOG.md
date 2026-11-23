@@ -6,6 +6,12 @@ this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+## v0.16.2
+
+### Fixed
+
+- Docs: examples pin `~> 0.16`, the getting-started guide has current resource counts, an accurate list of what's stored in state, and links that work on the registry.
+
 ## v0.16.1
 
 ### Fixed
